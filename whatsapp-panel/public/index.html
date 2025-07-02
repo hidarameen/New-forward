@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم واتساب ويب - WhatsApp Web Panel</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fab fa-whatsapp"></i>
+                    <h1>لوحة تحكم واتساب ويب</h1>
+                </div>
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span class="status-text">غير متصل</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- QR Code Section -->
+            <div class="section qr-section" id="qrSection">
+                <div class="section-header">
+                    <i class="fas fa-qrcode"></i>
+                    <h2>تسجيل الدخول</h2>
+                </div>
+                <div class="qr-container">
+                    <div class="qr-placeholder" id="qrPlaceholder">
+                        <i class="fas fa-mobile-alt"></i>
+                        <p>جاري تحضير باركود QR...</p>
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                    <img id="qrCode" class="qr-code" alt="QR Code" style="display: none;">
+                </div>
+                <div class="qr-instructions">
+                    <h3>طريقة المسح:</h3>
+                    <ol>
+                        <li>افتح تطبيق واتساب على هاتفك</li>
+                        <li>اذهب إلى القائمة أو الإعدادات</li>
+                        <li>اختر "الأجهزة المرتبطة"</li>
+                        <li>اضغط على "ربط جهاز"</li>
+                        <li>امسح الباركود أعلاه</li>
+                    </ol>
+                </div>
+                <div class="action-buttons">
+                    <button id="refreshQr" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i>
+                        تحديث الباركود
+                    </button>
+                </div>
+            </div>
+
+            <!-- Login Success Section -->
+            <div class="section login-success" id="loginSuccess" style="display: none;">
+                <div class="section-header success">
+                    <i class="fas fa-check-circle"></i>
+                    <h2>تم تسجيل الدخول بنجاح!</h2>
+                </div>
+                <div class="user-info" id="userInfo">
+                    <!-- User information will be populated here -->
+                </div>
+                <div class="action-buttons">
+                    <button id="disconnectBtn" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt"></i>
+                        قطع الاتصال
+                    </button>
+                </div>
+            </div>
+
+            <!-- Message Testing Section -->
+            <div class="section message-section" id="messageSection" style="display: none;">
+                <div class="section-header">
+                    <i class="fas fa-paper-plane"></i>
+                    <h2>إرسال رسالة تجريبية</h2>
+                </div>
+                <form id="messageForm" class="message-form">
+                    <div class="form-group">
+                        <label for="phoneNumber">رقم الهاتف:</label>
+                        <input type="tel" id="phoneNumber" placeholder="مثال: +966501234567" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="messageText">الرسالة:</label>
+                        <textarea id="messageText" placeholder="اكتب رسالتك هنا..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        إرسال الرسالة
+                    </button>
+                </form>
+            </div>
+
+            <!-- Notifications -->
+            <div id="notifications" class="notifications"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 لوحة تحكم واتساب ويب - جميع الحقوق محفوظة</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

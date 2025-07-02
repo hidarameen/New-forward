@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام توجيه تليجرام إلى واتساب - Telegram to WhatsApp Bridge</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h1>نظام توجيه الرسائل</h1>
+                    <span class="subtitle">تليجرام ← واتساب</span>
+                </div>
+                <div class="status-indicators">
+                    <div class="status-item" id="telegramStatus">
+                        <i class="fab fa-telegram"></i>
+                        <span>تليجرام</span>
+                        <div class="status-dot"></div>
+                    </div>
+                    <div class="status-item" id="whatsappStatus">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>واتساب</span>
+                        <div class="status-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Control Panel -->
+            <div class="section control-panel">
+                <div class="section-header">
+                    <i class="fas fa-cogs"></i>
+                    <h2>لوحة التحكم</h2>
+                </div>
+                
+                <div class="control-grid">
+                    <div class="control-card">
+                        <h3><i class="fas fa-power-off"></i> حالة التوجيه</h3>
+                        <div class="toggle-container">
+                            <label class="toggle">
+                                <input type="checkbox" id="forwardingToggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span id="forwardingStatus">معطل</span>
+                        </div>
+                    </div>
+
+                    <div class="control-card">
+                        <h3><i class="fas fa-sync-alt"></i> إعادة تشغيل واتساب</h3>
+                        <button id="restartWhatsApp" class="btn btn-warning">
+                            <i class="fas fa-redo"></i>
+                            إعادة تشغيل
+                        </button>
+                    </div>
+
+                    <div class="control-card stats-card">
+                        <h3><i class="fas fa-chart-line"></i> إحصائيات سريعة</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalForwarded">0</span>
+                                <span class="stat-label">إجمالي المُوجه</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="todayForwarded">0</span>
+                                <span class="stat-label">اليوم</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WhatsApp Connection -->
+            <div class="section whatsapp-section" id="whatsappSection">
+                <div class="section-header">
+                    <i class="fab fa-whatsapp"></i>
+                    <h2>اتصال واتساب</h2>
+                </div>
+
+                <!-- QR Code Display -->
+                <div class="qr-container" id="qrContainer">
+                    <div class="qr-placeholder" id="qrPlaceholder">
+                        <i class="fas fa-mobile-alt"></i>
+                        <p>جاري تحضير باركود QR...</p>
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                    <img id="qrCode" class="qr-code" alt="QR Code" style="display: none;">
+                </div>
+
+                <!-- Connection Status -->
+                <div class="connection-status" id="connectionStatus" style="display: none;">
+                    <div class="status-success">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>متصل بواتساب</h3>
+                        <div class="user-info" id="whatsappUserInfo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration -->
+            <div class="section config-section">
+                <div class="section-header">
+                    <i class="fas fa-sliders-h"></i>
+                    <h2>الإعدادات</h2>
+                </div>
+
+                <div class="config-grid">
+                    <!-- Target Numbers -->
+                    <div class="config-card">
+                        <h3><i class="fas fa-phone"></i> أرقام واتساب المستهدفة</h3>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="tel" id="newPhoneNumber" placeholder="+966501234567">
+                                <button id="addPhoneNumber" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="phone-list" id="phoneList"></div>
+                        </div>
+                    </div>
+
+                    <!-- Source Channels -->
+                    <div class="config-card">
+                        <h3><i class="fas fa-broadcast-tower"></i> قنوات تليجرام المراقبة</h3>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" id="newChannelId" placeholder="معرف القناة (مثل: -1001234567890)">
+                                <button id="addChannel" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="channel-list" id="channelList"></div>
+                            <div class="help-text">
+                                <i class="fas fa-info-circle"></i>
+                                أضف البوت كمشرف في القناة للحصول على معرف القناة
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Keywords Filter -->
+                    <div class="config-card">
+                        <h3><i class="fas fa-filter"></i> فلترة الكلمات المفتاحية</h3>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" id="newKeyword" placeholder="كلمة مفتاحية">
+                                <button id="addKeyword" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="keyword-list" id="keywordList"></div>
+                            <div class="help-text">
+                                <i class="fas fa-info-circle"></i>
+                                اتركها فارغة لتوجيه جميع الرسائل
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message Template -->
+                    <div class="config-card full-width">
+                        <h3><i class="fas fa-edit"></i> قالب الرسالة</h3>
+                        <div class="form-group">
+                            <textarea id="messageTemplate" placeholder="قالب مخصص للرسالة (اختياري)&#10;المتغيرات المتاحة: {message}, {channel}, {time}"></textarea>
+                            <div class="checkbox-group">
+                                <label>
+                                    <input type="checkbox" id="addChannelName" checked>
+                                    إضافة اسم القناة
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="addTimestamp" checked>
+                                    إضافة التاريخ والوقت
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="save-config">
+                    <button id="saveConfig" class="btn btn-success">
+                        <i class="fas fa-save"></i>
+                        حفظ الإعدادات
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="section stats-section">
+                <div class="section-header">
+                    <i class="fas fa-chart-bar"></i>
+                    <h2>الإحصائيات التفصيلية</h2>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon telegram">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>تليجرام</h3>
+                            <div class="stat-value" id="telegramReceived">0</div>
+                            <div class="stat-label">رسائل مستلمة</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>واتساب</h3>
+                            <div class="stat-value" id="whatsappSent">0</div>
+                            <div class="stat-label">رسائل مُرسلة</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon filtered">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>مُفلترة</h3>
+                            <div class="stat-value" id="messagesFiltered">0</div>
+                            <div class="stat-label">رسائل مُفلترة</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon errors">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>أخطاء</h3>
+                            <div class="stat-value" id="totalErrors">0</div>
+                            <div class="stat-label">إجمالي الأخطاء</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-log">
+                    <h3><i class="fas fa-history"></i> آخر الأنشطة</h3>
+                    <div class="log-container" id="activityLog">
+                        <div class="log-item">
+                            <span class="log-time">البدء</span>
+                            <span class="log-message">مرحباً بك في نظام التوجيه</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div id="notifications" class="notifications"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 نظام توجيه تليجرام إلى واتساب - جميع الحقوق محفوظة</p>
+            <div class="footer-links">
+                <a href="#" onclick="showHelp()">المساعدة</a>
+                <a href="#" onclick="showAbout()">حول</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-question-circle"></i> المساعدة</h2>
+                <span class="close" onclick="closeModal('helpModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <h3>خطوات الإعداد:</h3>
+                <ol>
+                    <li>احصل على توكن بوت تليجرام من @BotFather</li>
+                    <li>أضف التوكن في ملف .env</li>
+                    <li>امسح باركود QR لتسجيل دخول واتساب</li>
+                    <li>أضف أرقام واتساب المستهدفة</li>
+                    <li>أضف البوت كمشرف في القنوات المراد مراقبتها</li>
+                    <li>فعّل نظام التوجيه</li>
+                </ol>
+                
+                <h3>نصائح مهمة:</h3>
+                <ul>
+                    <li>تأكد من أن البوت مشرف في القناة</li>
+                    <li>استخدم الكلمات المفتاحية لفلترة الرسائل</li>
+                    <li>راقب الإحصائيات لمتابعة الأداء</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

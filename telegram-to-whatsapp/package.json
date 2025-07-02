@@ -1,0 +1,39 @@
+{
+  "name": "telegram-to-whatsapp-bridge",
+  "version": "1.0.0",
+  "description": "نظام توجيه الرسائل من قناة تليجرام إلى واتساب تلقائياً - Automatic message forwarding from Telegram channels to WhatsApp",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "telegram": "python3 telegram_bot.py",
+    "setup": "node setup.js",
+    "demo": "node demo.js"
+  },
+  "keywords": [
+    "telegram",
+    "whatsapp",
+    "bridge",
+    "forwarding",
+    "automation",
+    "arabic"
+  ],
+  "author": "Bridge Developer",
+  "license": "MIT",
+  "dependencies": {
+    "whatsapp-web.js": "^1.23.0",
+    "express": "^4.18.2",
+    "socket.io": "^4.7.5",
+    "axios": "^1.6.2",
+    "cors": "^2.8.5",
+    "qrcode": "^1.5.3",
+    "dotenv": "^16.3.1",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "fs-extra": "^11.2.0",
+    "moment": "^2.29.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}

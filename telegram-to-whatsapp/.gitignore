@@ -1,0 +1,104 @@
+# ملفات Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ملفات Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ملفات البيئة والإعدادات الحساسة
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# بيانات جلسات واتساب
+.wwebjs_auth/
+.wwebjs_cache/
+
+# ملفات السجلات
+logs/
+*.log
+
+# ملفات الإحصائيات والإعدادات (تحتوي على بيانات حساسة)
+config.json
+stats.json
+telegram_stats.json
+
+# ملفات العمليات المؤقتة
+*.pid
+.bridge.pid
+.whatsapp.pid
+.telegram.pid
+
+# ملفات النظام
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# محررات النصوص
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ملفات مؤقتة أخرى
+*.tmp
+*.temp
+.tmp/
+temp/
+
+# ملفات النسخ الاحتياطي
+*.bak
+*.backup
+backup/
+
+# ملفات التطوير
+coverage/
+.nyc_output
+.coverage
+
+# ملفات التوزيع
+dist/
+build/
+out/
+
+# ملفات الاختبار
+test-results/
+coverage/
+
+# ملفات خاصة بالمشروع
+demo_data/
+test_data/
+screenshots/
+
+# ملفات قواعد البيانات المحلية
+*.db
+*.sqlite
+*.sqlite3
+
+# ملفات الجلسات المؤقتة
+session_*
+*.session
+
+# ملفات أمان إضافية
+secrets/
+private/
+confidential/
